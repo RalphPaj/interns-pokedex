@@ -1,17 +1,47 @@
-// src/app.js
 import express from 'express';
-import router from './routes/index.js';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { config } from './config/index.js';
+import routes from './routes/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
+const { port: PORT, nodeEnv } = config;
 
-// Setup EJS
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(join(__dirname, '../public')));
+
+// View engine
 app.set('view engine', 'ejs');
-app.set('views', './src/views');
+app.set('views', join(__dirname, 'views'));
 
-// Serve static files
-app.use(express.static('public'));
+// Routes
+app.use('/', routes);
 
-// Use main router
-app.use('/', router);
+// Error handlers
+app.use((req, res) => {
+  res.status(404).render('error', {
+    message: 'Page not found',
+    error: 'The page you are looking for does not exist.'
+  });
+});
+
+app.use((err, _req, res, _next) => {
+  res.status(500).render('error', {
+    message: 'Something went wrong',
+    error: err.message
+  });
+});
+
+// Start server
+if (nodeEnv !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Pokedex server running at http://localhost:${PORT}`);
+  });
+}
 
 export default app;

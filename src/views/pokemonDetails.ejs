@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= pokemon.displayName %> - Pokedex</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="pokedex-container">
+    <header class="pokedex-header">
+      <a href="/" class="logo-link"><div class="logo">POKEDEX</div></a>
+    </header>
+
+    <main class="main-content">
+      <section class="pokemon-detail">
+        <h1><%= pokemon.displayName %> (#<%= pokemon.id %>)</h1>
+        <img src="<%= pokemon.image %>" alt="<%= pokemon.name %>">
+        <p><strong>Type:</strong> <%= pokemon.types.join(', ') %></p>
+        <p><strong>Height:</strong> <%= pokemon.height %> m</p>
+        <p><strong>Weight:</strong> <%= pokemon.weight %> kg</p>
+        <p><strong>Abilities:</strong> 
+          <% pokemon.abilities.forEach(a => { %>
+            <%= a.name %><%= a.isHidden ? ' (Hidden)' : '' %><% if (!a.isHidden) { %>, <% } %>
+          <% }) %>
+        </p>
+        <p><strong>Description:</strong> <%= pokemon.description %></p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

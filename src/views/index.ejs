@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pokedex</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="pokedex-container">
+
+    <!-- Header -->
+    <header class="pokedex-header">
+      <div class="header-left">
+        <div class="big-light"></div>
+        <div class="small-lights">
+          <div class="small-light red"></div>
+          <div class="small-light yellow"></div>
+          <div class="small-light green"></div>
+        </div>
+        <a href="/" class="logo-link"><div class="logo">POKEDEX</div></a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Search -->
+      <section class="search-section">
+        <form class="search-form" action="/search" method="get">
+          <div class="search-input-wrapper">
+            <input class="search-input" type="text" name="q" placeholder="Search Pokémon..." value="<%= searchQuery %>">
+            <button class="search-btn" type="submit">Search</button>
+          </div>
+        </form>
+
+        <!-- Type Filter -->
+        <div class="type-filter">
+          <label>Filter by type:</label>
+          <div class="type-buttons">
+            <a href="/" class="type-btn <%= selectedType === '' ? 'active' : '' %>">All Types</a>
+            <% types.forEach(type => { %>
+              <a href="/type/<%= type.name %>" 
+                 class="type-btn type-<%= type.name %> <%= selectedType === type.name ? 'active' : '' %>">
+                <%= type.displayName %>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pokemon Grid -->
+      <section class="pokemon-grid">
+        <% if (Array.isArray(pokemon)) { %>
+          <% pokemon.forEach(p => { %>
+            <% if (p) { %>
+              <a href="/pokemon/<%= p.name %>" class="pokemon-card type-bg-<%= p.types[0] %>">
+                <div class="pokemon-id">#<%= p.id %></div>
+                <div class="pokemon-image">
+                  <img src="<%= p.image %>" alt="<%= p.name %>">
+                </div>
+                <div class="pokemon-name"><%= p.displayName %></div>
+                <div class="pokemon-types">
+                  <% p.types.forEach(t => { %>
+                    <span class="type-badge type-<%= t %>"><%= t %></span>
+                  <% }) %>
+                </div>
+              </a>
+            <% } %>
+          <% }) %>
+        <% } else { %>
+          <p>No Pokémon found.</p>
+        <% } %>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>
