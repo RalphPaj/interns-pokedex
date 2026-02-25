@@ -40,7 +40,8 @@ export const getPokemonDetails = async (req, res) => {
   const { nameOrId } = req.params;
   try {
     const pokemon = await pokemonService.getPokemonDetails(nameOrId);
-    if (!pokemon) return res.status(404).render('error', { message: 'Pokémon not found', error: '' });
+    if (!pokemon)
+      return res.status(404).render('error', { message: 'Pokémon not found', error: '' });
 
     const types = await pokemonService.getPokemonTypes();
     res.render('pokemonDetails', { pokemon, types });
@@ -150,7 +151,8 @@ export const apiGetPokemonByType = async (req, res) => {
     const { type } = req.params;
     const page = parseInt(req.query.page) || 1;
     const data = await pokemonService.getPokemonByType(type, page);
-    if (!data) return res.status(404).json({ success: false, message: 'No Pokémon found for this type' });
+    if (!data)
+      return res.status(404).json({ success: false, message: 'No Pokémon found for this type' });
     res.status(200).json({ success: true, data });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Service error', error: error.message });

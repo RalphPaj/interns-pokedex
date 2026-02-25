@@ -74,7 +74,7 @@ export const getAllPokemon = async (page = 1, limit = config.pagination.defaultL
   const offset = (page - 1) * limit;
   const data = await pokemonRepository.getAllPokemon(limit, offset);
 
-    const pokemonWithDetails = await Promise.all(
+  const pokemonWithDetails = await Promise.all(
     data.results.map((pokemon) => {
       return getPokemonDetails(pokemon.name);
     })
@@ -115,16 +115,18 @@ export const getPokemonTypes = async () => {
     .map((t) => ({ name: t.name, displayName: formatName(t.name) }));
 };
 
-export const getPokemonByType = async (typeName, page = 1, limit = config.pagination.defaultLimit) => {
+export const getPokemonByType = async (
+  typeName,
+  page = 1,
+  limit = config.pagination.defaultLimit
+) => {
   const pokemonList = await pokemonRepository.getPokemonByType(typeName);
   if (!pokemonList) return null;
 
   const offset = (page - 1) * limit;
   const paginatedList = pokemonList.slice(offset, offset + limit);
 
-  const pokemonWithDetails = await Promise.all(
-    paginatedList.map((p) => getPokemonDetails(p.name))
-  );
+  const pokemonWithDetails = await Promise.all(paginatedList.map((p) => getPokemonDetails(p.name)));
 
   return {
     pokemon: pokemonWithDetails.filter((p) => p !== null),
