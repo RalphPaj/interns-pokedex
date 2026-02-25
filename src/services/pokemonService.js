@@ -74,8 +74,8 @@ export const getAllPokemon = async (page = 1, limit = config.pagination.defaultL
   const offset = (page - 1) * limit;
   const data = await pokemonRepository.getAllPokemon(limit, offset);
 
-  const pokemonWithDetails = await Promise.all(
-    data.results.map(async (pokemon) => {
+    const pokemonWithDetails = await Promise.all(
+    data.results.map((pokemon) => {
       return getPokemonDetails(pokemon.name);
     })
   );
